@@ -1,0 +1,153 @@
+{extend name="add_base" /}
+{block name="style"}
+<link rel="stylesheet" type="text/css" href="/static/admin/webuploader/webuploader.css">
+<style type="text/css">
+</style>
+{/block}
+{block name="main"}
+<article class="cl pd-15">
+    <form action="" method="post" class="form form-horizontal" id="form-admin-add" onsubmit="return false">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>轮播图名称：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <input type="text" class="input-text"  value="{$data.name}" placeholder="轮播图名称" id="name" name="name"  autocomplete="off">
+                <input type="text" value="{$data.id}" disabled style="display: none" name="id" id="id">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>上传图片：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <div class="uploader-thum-container2">
+                    <div id="thelist2" class="uploader-list">
+                        <img src="{$data.url}" id="show_img" alt="" width="250px">
+                    </div>
+                    <div id="picker2" class="" style="display: inline-block">选择图片</div>
+                    <input type="text" value="{$data.url}" disabled style="display: none" name="image" id="image">
+                    <div id="btn2" class="btn btn-primary  btn-uploadstar radius ml-10">开始上传</div>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">跳转链接：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <input type="text" class="input-text"  value="{php}if ($data['link'] != 'javascript:void(0);') {echo $data['link'];}{/php}" placeholder="跳转链接" id="link" name="link"  autocomplete="off">
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-7 col-xs-offset-4 col-sm-offset-3">
+                <input id="submit_btn" class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</article>
+{/block}
+{block name="script"}
+<script type="text/javascript" src="/static/admin/webuploader/webuploader.min.js"></script>
+<script type="text/javascript">
+    $("#submit_btn").click(function () {
+        var name = $("#name").val();
+        if(name == ''){
+            layer.msg("轮播图名称不能为空");
+            return false
+        }
+        var image = $("#image").val();
+        if(image == ''){
+            layer.msg("请上传图片");
+            return false
+        }
+        var link = $("#link").val();
+        var id = $("#id").val();
+        $.post("{:url('/admin/college/rotation_update')}",
+            {'id':id,'name':name,'image':image,'link':link,},
+            function (result) {
+                if(result['code'] == 200){
+                    $("#submit_btn").attr("disabled", "true");
+                    layer.msg("修改成功,页面自动跳转",{icon: 6,time:1000})
+                    setTimeout(function(){
+                        parent.location.reload();
+                    },1000);
+                } else {
+                    layer.msg(result['msg'],{icon: 5,time:1000});
+                }
+            })
+    });
+</script>
+<script type="text/javascript">
+    var fileMd5;
+    var $list2=$("#thelist2");
+    var state2 = 'pending';//初始按钮状态
+    var $btn2=$("#btn2");
+    var uploader2 = WebUploader.create({
+        // swf文件路径
+        swf: '/static/admin/webuploader/Uploader.swf',
+        // 文件接收服务端。
+        server: "/admin/uploader/webuploader",
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick : {
+            id : '#picker2',//这个id是你要点击上传文件的id
+            multiple: false,
+        },
+        // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+        resize : true,
+        auto : false,
+        //开启分片上传
+        chunked : true,
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+    // 当有文件被添加进队列的时候
+    uploader2.on('fileQueued', function(file) {
+        $list2.append(
+            '<div id="' + file.id + '" class="item2">'
+            // + '<p class="info2">' + file.name + '</p>'
+            + '<div class="progress"><div class="progress-bar"><span class="sr-only2" style="width:0%"></span></div></div>'
+            + '<p class="state2">等待上传...</p></div>');
+        $("#picker2").css('display','none')
+    });
+    // 文件上传过程中创建进度条实时显示。
+    uploader2.on('uploadProgress', function(file, percentage) {
+        $(".sr-only2").css("width",Math.round(percentage * 100) + '%')
+        // $('#' + file.id).find('p.state').text(
+        //     '上传中 ' + Math.round(percentage * 100) + '%');
+    });
+    uploader2.on('uploadSuccess', function(file,result2) {
+        $('#' + file.id).find('p.state2').text('已上传');
+        $("#show_img").attr('src','/'+result2['data']['file_path'])
+        $("#image").val('/'+result2['data']['file_path']);
+    });
+    uploader2.on('uploadError', function(file) {
+        $('#' + file.id).find('p.state2').text('上传出错');
+    });
+    uploader2.on('uploadComplete', function(file) {
+        $('#' + file.id).find('.progress').fadeOut();
+    });
+    uploader2.on('all', function(type) {
+        if (type === 'startUpload') {
+            state2 = 'uploading';
+        } else if (type === 'stopUpload') {
+            state2 = 'paused';
+        } else if (type === 'uploadFinished') {
+            state2 = 'done';
+        }
+
+        if (state2 === 'uploading') {
+            $btn2.text('暂停上传');
+        } else {
+            $btn2.text('开始上传');
+        }
+    });
+    $btn2.on('click', function(){
+        if (state2 === 'uploading'){
+            uploader2.stop(true);
+        } else {
+            uploader2.upload();
+        }
+    });
+    $(".webuploader-pick").attr('class','btn btn-default btn-uploadstar radius ml-10');
+</script>
+{/block}

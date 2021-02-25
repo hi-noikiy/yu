@@ -1,0 +1,58 @@
+{extend name="add_base" /}
+{block name="style"}
+<style type="text/css">
+</style>
+{/block}
+{block name="main"}
+<article class="cl pd-15">
+    <form action="" method="post" class="form form-horizontal" id="form-admin-add" onsubmit="return false">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>栏目名称：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <input type="text" class="input-text"  value="" placeholder="栏目名称" id="category" name="category"  autocomplete="off">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">所属栏目：</label>
+            <div class="formControls col-xs-8 col-sm-7"> <span class="select-box" style="width:150px;">
+                <select class="select" id="pid" name="pid" size="1">
+                    <option value="0">顶级</option>
+                    {foreach $category as $val}
+                    <option value="{$val['id']}">{$val["category"]}</option>
+                    {/foreach}
+				</select>
+				</span> </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-7 col-xs-offset-4 col-sm-offset-3">
+                <input id="submit_btn" class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</article>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    $("#submit_btn").click(function () {
+        var category = $("#category").val();
+        if(category == ''){
+            layer.msg("栏目名称不能为空");
+            return false
+        }
+        var pid = $("#pid").val();
+        $.post("{:url('/admin/college/category_save')}",
+            {'category':category,'pid':pid},
+            function (result) {
+                if(result['code'] == 200){
+                    $("#submit_btn").attr("disabled", "true");
+                    layer.msg("添加成功,页面自动跳转",{icon: 6,time:1000})
+                    setTimeout(function(){
+                        parent.location.reload();
+                    },1000);
+                } else {
+                    layer.msg(result['msg'],{icon: 5,time:1000});
+                }
+            })
+    });
+</script>
+{/block}

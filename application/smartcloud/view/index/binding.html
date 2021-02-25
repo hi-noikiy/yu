@@ -1,0 +1,95 @@
+<!Doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>微信api测试</title>
+    <style>
+        #main{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="main">
+    <img id="imgcode" src="" alt="" width="15%">
+    <div id="nikename"></div>
+</div>
+</body>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/layui/layui.all.js"></script>
+<script>
+    // 获取登录二维码
+    $.post("{:url('/smartcloud/wxapi/wxloginqrcode')}", {},function($data) {
+        if($data['code'] == 200){
+            // 显示二维码
+            $("#imgcode").attr('src',$data['data']['qrcode_base64'])
+            // 开启轮询查询
+            checklogincode($data['data']['uuid'],$data['data']['guid'])
+        } else {
+            // 请求失败处理
+            layer.alert($data['msg'])
+        }
+    });
+
+    // 轮询查询扫码状态
+    function checklogincode($uuid,$guid) {
+        // 登录类型 1 首次绑定账号,2二次登陆
+        var type = 1
+        //定义定时器
+        var interval = setInterval(function(){
+            $.post("{:url('/smartcloud/wxapi/wxcheckloginqrcode')}", {uuid:$uuid,guid:$guid,type:type},function($data) {
+                if($data['code'] == 200){ // 成功登录跳转
+                    // 关闭轮询查询
+                    clearInterval(interval);
+                    layer.msg("正在登录,请勿关闭窗口")
+                    var index = layer.load(2, {shade: false}); //0代表加载的风格，支持0-2
+                    // 人工登录
+                    $.post("/smartcloud/wxapi/wxloginmanual",{"data":$data['data'],"type":type},function (result) {
+                        if(result['code'] == 200){
+                            layer.msg("登录成功")
+                            layer.msg("开始同步通讯录,请勿关闭窗口")
+                            // 初始化通讯录
+                            $.post("/smartcloud/wxapi/wxinitcontact",{"guid":$data['data']['guid'],"wxid":$data['data']['wxid']},function (result) {
+                                if(result['code'] == 200){
+                                    layer.msg("同步通讯录成功")
+                                    // 关闭弹窗刷新父级窗口
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    parent.layer.close(index);
+                                    parent.location.reload()
+                                } else {
+                                    layer.closeAll('loading');
+                                    layer.alert($data['msg'])
+                                }
+                            })
+                        } else {
+                            layer.closeAll('loading');
+                            layer.alert(result['msg'])
+                        }
+                    })
+                } else if($data['code'] == 202) { // 扫码未点击登录
+                    // 展示信息
+                    wx_info($data['data']['headImgUrl'],$data['data']['nickName'])
+                } else if($data['code'] == 400) {
+                    // 关闭轮询查询
+                    clearInterval(interval);
+                    // 请求失败处理
+                    layer.alert($data['msg'])
+                }
+            });
+        },2000);
+    }
+
+    // 头像名称展示
+    function wx_info($headimgurl,$nikename) {
+        $("#imgcode").attr('src',$headimgurl);
+        $("#nikename").html($nikename);
+    }
+
+
+</script>
+
+
+</html>

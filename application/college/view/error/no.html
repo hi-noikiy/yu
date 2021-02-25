@@ -1,0 +1,25 @@
+{extend name="web_base" /}
+
+{block name="title"}羽化学院{/block}
+
+{block name="style"}
+{/block}
+{block name="main"}
+<div class="play_main" style="height:70%;text-align: center;">
+    <div>
+        {if $type == 1}
+        <img style="width: 15%" src="/static/web/image/zanwushuju.png" alt="">
+        {elseif $type == 2 /}
+        <img style="width: 15%" src="/static/web/image/suo.png" alt="">
+        {/if}
+    </div>
+    <div style="font-size: 1.5rem">{$msg}</div>
+</div>
+{/block}
+{block name="script"}
+<script>
+    setInterval(function () {
+        window.location.href = "javascript:history.back(-1)";
+    },1500);
+</script>
+{/block}

@@ -1,0 +1,88 @@
+{extend name="base" /}
+
+{block name="title"}视频栏目管理{/block}
+
+{block name="style"}
+{/block}
+
+
+{block name="main"}
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> <a href="/admin" class="maincolor">首页</a> <span class="c-gray en">&gt;</span> 学院管理 <span class="c-gray en">&gt;</span> 栏目管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="pd-20 text-c"  style="text-align: center">
+    <div class="text-c">
+        <form action="/admin/college/category" method="get">
+            <input type="text" class="input-text" style="width:250px" placeholder="栏目名称" id="category" name="category" value="{$Request.param.category}">
+            <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+        </form>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-10">
+        <span class="l">
+<!--            <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">-->
+<!--                <i class="Hui-iconfont">&#xe6e2;</i> 批量删除-->
+<!--            </a> -->
+            <a class="btn btn-primary radius" onclick="system_category_add('添加栏目','/admin/college/category_create','1000','800')" href="javascript:;">
+                <i class="Hui-iconfont">&#xe600;</i> 添加栏目
+            </a></span>
+        <span class="r">共有数据：<strong>{$total}</strong> 条</span> </div>
+    <div class="mt-10">
+        <table class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            <tr>
+                <th scope="col" colspan="9">栏目列表</th>
+            </tr>
+            <tr class="text-c">
+                <th width="80">ID</th>
+                <th>栏目名称</th>
+                <th>所属栏目</th>
+                <th width="100">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $list as $val}
+                <tr class="text-c">
+                    <td>{$val.id}</td>
+                    <td class="text-l">{$val.category}</td>
+                    <td class="text-l">{$val.pname}</td>
+                    <td class="f-14">
+                        <a title="编辑" href="javascript:;" onclick="system_category_edit('栏目编辑','/admin/college/category_edit?id={$val.id}','{$val.id}','1000','800')" style="text-decoration:none">
+                            <i class="Hui-iconfont">&#xe6df;</i>
+                        </a>
+    <!--                    <a title="删除" href="javascript:;" onclick="article_category_del(this,'1')" class="ml-5" style="text-decoration:none">-->
+    <!--                        <i class="Hui-iconfont">&#xe6e2;</i>-->
+    <!--                    </a>-->
+                    </td>
+                </tr>
+            {/foreach}
+            </tbody>
+        </table>
+        {if empty($list)}
+        <div id="no_content">
+            <div>
+                <img src="/static/web/image/zanwuneirong.png" alt="">
+            </div>
+            暂无内容
+        </div>
+        {/if}
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+    /*系统-栏目-添加*/
+    function system_category_add(title,url,w,h){
+        layer_show(title,url,w,h);
+    }
+    /*系统-栏目-编辑*/
+    function system_category_edit(title,url,id,w,h){
+        layer_show(title,url,w,h);
+    }
+    /*系统-栏目-删除*/
+    function system_category_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            $(obj).parents("tr").remove();
+            layer.msg('已删除!',{icon:1,time:1000});
+        });
+    }
+</script>
+{/block}

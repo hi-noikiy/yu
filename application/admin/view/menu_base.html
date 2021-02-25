@@ -1,0 +1,40 @@
+<aside class="Hui-aside">
+    <div class="menu_dropdown bk_2">
+        {php}$admin_user = session("admin_user");{/php}
+        {php}$admin_menu = session("admin_menu_".$admin_user['groupid']);{/php}
+        {php}$parent_id = session("parent_id");{/php}
+        {foreach $admin_menu as $val}
+        {if $val['is_show'] == 1}
+        <dl>
+            <dt>
+                <i class="Hui-iconfont">{$val['iconfont']|raw}</i>
+                {$val['name']}
+                <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i>
+            </dt>
+            {if $val['menu_id'] == session("parent_id")}
+            <dd class="selected">
+            {else /}
+            <dd>
+            {/if}
+                <ul>
+                    {foreach $val['subclass'] as $vv}
+                    {if $vv['is_show'] == 1}
+                        {if '/'.$Request.path == $vv['route']}
+                        <li class="current" id="select">
+                        {else /}
+                        <li>
+                        {/if}
+                            <a href="{$vv['route']}" title="{$vv['name']}">{$vv['name']}</a>
+                        </li>
+                    {/if}
+                    {/foreach}
+                </ul>
+            </dd>
+        </dl>
+        {/if}
+        {/foreach}
+    </div>
+</aside>
+<div class="dislpayArrow hidden-xs">
+    <a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a>
+</div>

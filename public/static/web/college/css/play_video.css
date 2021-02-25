@@ -1,0 +1,38 @@
+/*播放页CSS*/
+.play_main{width: 100%;margin: 5px 0 0 0;background-color: rgb(245, 245, 245);padding: 0 0 30px 0;}
+.play_nav{width: 60%;margin: 0 auto;line-height: 30px;padding: 20px 0;font-size: 0.9rem;color: rgba(0, 0, 0, 0.45);}
+.play_content{width:60%;margin: 0 auto;background-color :rgb(245, 245, 245);}
+/*视频*/
+.video{background-color :#fff;padding: 15px;font-weight: 500;}
+.video span{margin: 0 17px 0 17px;}
+.video_div_1{font-size: 1.5rem;padding: 20px 0 20px 0}
+.video_div_2{font-size: 0.8rem;padding: 0 0 20px 0}
+.video_span_1{margin:  0 17px 0 0;}
+.video_span_2{position:relative;left: 10px;}
+.video_span_download{position:relative;left: 10px;}
+.video_span_download a{color: #ee7800 !important;}
+.video_span_download:hover{cursor:pointer;}
+.fabulous_1:hover,.fabulous_2:hover{cursor:pointer;}
+/*喜欢*/
+.like{width: 25%; background-color :#fff;display: inline-block;float: right;padding: 10px;}
+.like_main{width: 90%;border-radius: 10px;background-color: rgb(248, 248, 248);margin-bottom: 20px}
+.like_img{height: 140px;border-radius: 10px;}
+.like_div_1{font-size: 1rem;font-weight: 500;padding-bottom: 15px;}
+.like_div_2{width: 90%;margin: 0 auto}
+.like_div_3{margin: 10px;}
+.like_div_4{margin: 0 40px 0 40px}
+/*评论*/
+.evaluate{background-color :#fff;margin-top:20px;}
+.evaluate_div_1,.evaluate_div_2{display: inline-block;width: 10%;height: 40px;text-align:center;line-height: 40px;font-size: 1rem;margin:0 15px;}
+.evaluate_div_1:hover,.evaluate_div_2:hover{cursor:pointer;}
+@media only screen and (max-width:1126px){
+    .play_content{width: 100%;}
+    .video{width: 100%;}
+    .play_nav{margin:0;}
+}
+@media only screen and (max-width:735px){
+    .play_content{width: 100%;}
+    .video{width: 128%;}
+    .like{display: none}
+    .play_nav{padding: 0;margin:0;}
+}

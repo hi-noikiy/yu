@@ -1,0 +1,134 @@
+{extend name="add_base" /}
+{block name="style"}
+<style type="text/css">
+</style>
+{/block}
+{block name="main"}
+<article class="cl pd-20">
+    <form action="" method="post" class="form form-horizontal" id="form-admin-role-add" onsubmit="return false">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="roleName" name="roleName" datatype="*4-16" nullmsg="用户账户不能为空">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">权限：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {foreach $list as $key => $val}
+                {if $val.is_show == 1 }
+                <dl class="permission-list">
+                    <dt>
+                        <label>
+                            <input type="checkbox" value="{$val.menu_id}" name="user-Character-0" id="user-Character-0">
+                            {$val.name}</label>
+                    </dt>
+                    <dd>
+                        <dl class="cl permission-list2">
+                            <dt>
+                                {foreach $val.subclass as $vv}
+                                <label class="">
+                                    <input type="checkbox" value="{$vv.menu_id}" name="user-Character-0-0" id="user-Character-0-0">
+                                    {$vv.name}
+                                </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                {/foreach}
+                            </dt>
+                        </dl>
+                    </dd>
+                </dl>&nbsp;
+                {/if}
+                {/foreach}
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button type="submit" class="btn btn-success radius" id="admin-role-save" name="admin-role-save"><i class="icon-ok"></i> 确定</button>
+            </div>
+        </div>
+    </form>
+</article>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    $(function(){
+        // 选择一类,全选所包含的所有子类
+        $(".permission-list dt input:checkbox").click(function(){
+            $(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
+        });
+        // 选择二类自动选择所属一类
+        $(".permission-list2 dt input:checkbox").click(function(){
+            $(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
+            if(!$(this).prop("checked")){
+                //取消选中
+                var l = $(this).parents(".permission-list").find(".permission-list2").find("input:checked").length
+                if(l == 0){
+                    $(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
+                }
+            }
+        });
+        // 选择二类,全选所包含所有子类
+        // $(".permission-list2 dd input:checkbox").click(function(){
+        //     var l =$(this).parent().parent().find("input:checked").length;
+        //     var l2=$(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
+        //     if($(this).prop("checked")){
+        //         $(this).closest("dl").find("dt input:checkbox").prop("checked",true);
+        //         $(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
+        //     }
+        //     else{
+        //         if(l==0){
+        //             $(this).closest("dl").find("dt input:checkbox").prop("checked",false);
+        //         }
+        //         if(l2==0){
+        //             $(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
+        //         }
+        //     }
+        // });
+    });
+    $("#admin-role-save").click(function () {
+        var rolename = $("#roleName").val()
+        if(rolename.length == 0){
+            layer.msg("请填写角色名称")
+            return false;
+        }
+        var chk_list =[];
+        $("input[name='user-Character-0']:checked").each(function(){
+            chk_list.push($(this).val());
+        });
+        // if(chk_list.length == 0){
+        //     layer.msg("请选择权限")
+        //     return false;
+        // }
+        var chk_list_2 =[];
+        $("input[name='user-Character-0-0']:checked").each(function(){
+            chk_list_2.push($(this).val());
+        });
+        if(chk_list_2.length == 0){
+            layer.msg("请选择权限")
+            return false;
+        }
+        // var chk_list_3 =[];
+        // $("input[name='user-Character-0-0-0']:checked").each(function(){
+        //     chk_list_3.push($(this).val());
+        // });
+        // console.log(chk_list_3);
+        // if(chk_list_3.length == 0){
+        //     layer.msg("请选择权限")
+        //     return false;
+        // }
+        $.post("{:url('/admin/group/save')}",
+            {'rolename':rolename,'chk_list':chk_list,'chk_list_2':chk_list_2},
+            function (result) {
+                if(result['code'] == 200){
+                    $("#admin-role-save").attr("disabled", "true");
+                    layer.msg("添加成功,页面自动跳转",{icon: 6,time:1000})
+                    setTimeout(function(){
+                        parent.location.reload();
+                    },1000);
+                } else {
+                    layer.msg(result['msg'],{icon: 5,time:1000});
+                }
+        })
+
+    });
+</script>
+{/block}

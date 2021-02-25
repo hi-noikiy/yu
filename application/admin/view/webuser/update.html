@@ -1,0 +1,118 @@
+{extend name="add_base" /}
+{block name="style"}
+<style type="text/css">
+</style>
+{/block}
+{block name="main"}
+<article class="cl pd-15">
+    <form action="" method="post" class="form form-horizontal" id="form-admin-add" onsubmit="return false">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员账号：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <input type="text" disabled style="display: none" value="{$data['id']}" id="id" name="id">
+                <input type="text" class="input-text"  value="{$data['username']}" placeholder="用户名" id="adminName" name="username" autocomplete="off">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>修改密码：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <input type="password" class="input-text" autocomplete="off" value="" placeholder="密码" id="password" name="password">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>性别：</label>
+            <div class="formControls col-xs-8 col-sm-7 skin-minimal">
+                <div class="radio-box">
+                    <input name="sex" type="radio" id="sex-1" value="1" {if $data['sex'] == 1 } checked {else /}checked{/if} >
+                    <label for="sex-1">男</label>
+                </div>
+                <div class="radio-box">
+                    <input name="sex" type="radio" value="2" id="sex-2" {if $data['sex'] == 2 } checked {/if}>
+                    <label for="sex-2">女</label>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>真实姓名：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <input type="text" class="input-text" value="{$data['truename']}" placeholder="真实姓名" id="trueName" name="truename" autocomplete="off">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <input type="text" class="input-text" value="{$data['userphone']}" placeholder="手机号码" id="phone" name="phone" autocomplete="off">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">角色：</label>
+            <div class="formControls col-xs-8 col-sm-7"> <span class="select-box" style="width:150px;">
+                <select class="select" id="groupid" name="groupid" size="1">
+                    {foreach $role as $val}
+                    <option value="{$val['id']}" {if $data['groupid'] == $val['id']}selected{/if}>{$val['rolename']}</option>
+                    {/foreach}
+				</select>
+				</span> </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-7 col-xs-offset-4 col-sm-offset-3">
+                <input id="submit_btn" class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+<!--                <input id="close_btn" class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;关闭&nbsp;&nbsp;">-->
+            </div>
+        </div>
+    </form>
+</article>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    $("#submit_btn").click(function () {
+        var id = $("#id").val();
+        var username = $("#adminName").val();
+        var truename = $("#trueName").val();
+        var password = $("#password").val();
+        var sex = $('input:radio[name="sex"]:checked').val();
+        var phone = $("#phone").val();
+        var groupid = $("#groupid").val();
+        if(username == ''){
+            layer.msg("用户名不能为空");
+            return false
+        }
+        if(password != ''){
+            var vailpassword_result = vailPassword(password);
+            if(vailpassword_result != ''){
+                layer.msg(vailpassword_result);
+                return false
+            }
+        }
+        if(truename == ''){
+            layer.msg("真实姓名不能为空");
+            return false
+        }
+        var vailPhone_result = vailPhone(phone);
+        if(vailPhone_result != ''){
+            layer.msg(vailPhone_result);
+            return false
+        }
+        if(groupid == ''){
+            layer.msg("请选择角色");
+            return false
+        }
+        $.post("{:url('/admin/webuser/update')}",
+            {'id':id,'username':username,'password':password,'phone':phone,'truename':truename,'sex':sex,'groupid':groupid},
+            function (result) {
+                if(result['code'] == 200){
+                    $("#submit_btn").attr("disabled", "true");
+                    layer.msg("修改成功,页面自动跳转",{icon: 6,time:1000})
+                    setTimeout(function(){
+                        parent.location.reload();
+                    },1000);
+                } else {
+                    layer.msg(result['msg'],{icon: 5,time:1000});
+                }
+            })
+    });
+    $('#close_btn').click(function () {
+        layer_close()
+    });
+</script>
+{/block}

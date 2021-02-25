@@ -1,0 +1,88 @@
+{extend name="base" /}
+
+{block name="title"}聊天记录列表{/block}
+
+{block name="style"}
+<style type="text/css">
+
+</style>
+{/block}
+
+{block name="main"}
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> <a href="/admin" class="maincolor">首页</a>
+    <span class="c-gray en">&gt;</span>
+    智能云管理
+    <span class="c-gray en">&gt;</span>
+    聊天记录列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="Hui-article" style="text-align: center">
+    <article class="cl pd-20">
+        <div class="text-c">
+            <!--            <form action="/admin/group" method="get">-->
+            <!--                <input type="text" class="input-text" style="width:250px" placeholder="输入角色名称" id="group" name="group" value="{$Request.param.group}">-->
+            <!--                <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>-->
+            <!--            </form>-->
+        </div>
+        <div class="cl pd-5 bg-1 bk-gray mt-10">
+            <!--            <span class="l">-->
+            <!--                <a class="btn btn-primary radius" href="javascript:;" onclick="admin_role_add('添加角色','/admin/group/create','1000','800')"><i class="Hui-iconfont">&#xe600;</i> 添加角色</a>-->
+            <!--            </span> -->
+            <span class="r">共有数据：<strong>{$list->total()}</strong> 条</span>
+        </div>
+        <div class="mt-10">
+            <table class="table table-border table-bordered table-hover table-bg">
+                <thead>
+                <tr>
+                    <th scope="col" colspan="5">{$owner_name} 与 {$friend_name} 聊天记录列表</th>
+                </tr>
+                <tr class="text-c">
+                    <th width="40">发送人</th>
+                    <th width="40">接收人</th>
+                    <th width="200">内容</th>
+                    <th width="40">发送时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name='list' id='user'}
+                <tr class="text-c">
+                    {if $user['is_send'] == 1}
+                    <td>{$user['a_nickname']}</td>
+                    <td>{$user['d_nickname']}</td>
+                    {else /}
+                    <td>{$user['d_nickname']}</td>
+                    <td>{$user['a_nickname']}</td>
+                    {/if}
+                    <td>
+                        {switch $user['type']}
+                        {case 1}{$user['content']}{/case}
+                        {case 3}<a href="javascript:void(0);"><img src="{$user['img_base64']}" style="width: 300px;max-height: 200px" alt=""></a>{/case}
+                        {case 34}语音{/case}
+                        {case 43}视频{/case}
+                        {case 47}<a href="javascript:void(0);"><img src="{$user['img_base64']}" style="width: 300px;max-height: 200px" alt=""></a>{/case}
+                        {/switch}
+                    </td>
+                    <td>{$user['send_time']|date='Y-m-d H:i:s'}</td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+            {$list|raw}
+            {if empty($user)}
+            <div id="no_content">
+                <div>
+                    <img src="/static/web/image/zanwuneirong.png" alt="">
+                </div>
+                暂无内容
+            </div>
+            {/if}
+        </div>
+    </article>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+</script>
+{/block}

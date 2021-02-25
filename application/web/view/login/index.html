@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>羽化科技-登录</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            text-decoration: none;
+            text-align: center;
+        }
+        .login-main {
+            margin: 300px auto;
+        }
+        .layui-elip {
+            font-size: 24px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 300px;
+            margin-bottom: 30px;
+        }
+        .layui-form-item {
+            width: 280px;
+            text-align: center;
+        }
+        .line1 {
+            height: 75px;
+            line-height: 50px;
+
+        }
+        .captcha{
+            width: 155px;
+            display:inline;
+        }
+        .demo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            min-width: 1000px;
+            z-index: -10;
+            zoom: 1;
+            background: url("static/web/image/login_bg.png");
+            background-size: cover;
+            -o-background-size: cover;
+            background-position: center 0;
+        }
+    </style>
+</head>
+<body>
+<div class="demo">
+    <div class="login-main layui-form-item">
+        <header class="layui-elip">登录</header>
+        <form action="" method="post" onsubmit="return false;">
+            <div class="line1">
+                <input type="text" id="username" name="username" required  lay-verify="required" placeholder="用户名" autocomplete="off" class="layui-input">
+            </div>
+            <div class="line1">
+                <input type="password" id="password" name="password" required  lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
+            </div>
+            <div class="line1">
+                <input type="text" id="captcha" name="captcha" lay-verify="required" placeholder="验证码" maxlength="4" autocomplete="off" class="layui-input captcha">
+                <img src="{:captcha_src()}" alt="captcha"  id="captcha_code"  onclick="javascript:this.src='{:captcha_src()}?rand='+Math.random()"/>
+            </div>
+            <div class="line1 login-btn">
+                <button type="submit" id="login_btn" class="layui-btn" name="btn1" value="登录">登录</button>
+                <button type="reset" id="reset_btn" class="layui-btn layui-btn-normal" name="btn2" value="重置">重置</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery.min.js"></script>
+<script type="text/javascript">
+    layui.use('form', function () {
+        var form = layui.form, $ = layui.jquery;
+    });
+
+    $("#login_btn").click(function () {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var captcha = $("#captcha").val();
+        if(username == ''){
+            layer.msg("请输入用户名");
+            return false;
+        }
+        if(password == ''){
+            layer.msg("请输入密码");
+            return false;
+        }
+        if(captcha == ''){
+            layer.msg("请输入验证码");
+            return false;
+        }
+        $.post("{:url('/login/checklogin')}", {username:username,password:password,captcha:captcha},function($data) {
+            $("#captcha_code").trigger("click");
+            if($data.code == 200){
+                //登录成功操作
+                window.location.href = $data.data['come_url'];
+            }else{
+                layer.msg($data.msg);
+                // $('#reset_btn').trigger("click");  // 重置信息
+            }
+        });
+    });
+
+</script>
+</html>

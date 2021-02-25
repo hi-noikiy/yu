@@ -1,0 +1,333 @@
+/*公共*/
+body html{
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.base{
+    height: 90%;
+    padding: 10px;
+}
+/*头部按钮*/
+.top_btn:hover{
+    background-color: #4EAEFB;
+}
+/*用户列表*/
+.user_list{
+    display: inline-block;
+    width: 5%;
+    height: 90%;
+    text-align: center;
+    border:rgba(245,246,250,.85) 1px solid;
+    float: left;
+    border-radius: 10px;
+}
+.user_list .user_list_headimg{
+    margin-top: 5px;
+    padding: 5px;
+}
+.user_list  .user_list_headimg img:hover{
+    box-shadow: #00ff2b 0 0 30px;
+}
+.user_list  .user_list_headimg  img{
+    width: 65%;
+}
+.user_list_active{
+    box-shadow: #00ff2b 0 0 20px;
+}
+/*导航*/
+.nav{
+    display: inline-block;
+    width: 95%;
+    height: 5%;
+    border: rgba(245,246,250,.85) 1px solid;
+    float: left;
+    border-radius: 10px;
+}
+.nav div{
+    margin-left: 35px;
+    width: 40px;
+    /*height: 35px;*/
+    /*background-color: #89d7ff;*/
+    display: inline-block;
+    text-align: center;
+    /*line-height: 35px;*/
+}
+.text_friend{
+    border-radius: 50%;
+}
+.text_friend_active{
+    box-shadow: #00ff2b 0 0 20px;
+}
+/*联系人,消息列表*/
+.main{
+    display: inline-block;
+    width: 15%;
+    height: 88%;
+    border: rgba(245,246,250,.85) 1px solid;
+    float: left;
+    border-radius: 10px;
+    position:relative;
+    background-color: #f5f6fa;
+}
+.main_friend{
+    height: 95%;
+    border-radius: 10px;
+    overflow-y: auto;
+}
+/*滚动条样式*/
+.main_friend::-webkit-scrollbar {
+    width: 0px;
+}
+.main_friend::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.2);
+}
+.main_friend::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 0;
+    background: rgba(0,0,0,0.1);
+}
+.text-uppercase{
+    margin: 10px 5px;
+    font-size: 1.8rem;
+}
+.text-uppercase-add{
+    border: 0;
+    width: 100%;
+    line-height:3rem;
+    text-align: center;
+    background-color: #E8E8E8;
+    font-size: 1.2rem;
+    border-radius: 7%;
+    margin:0.5rem 0;
+}
+.text-uppercase-add:active{
+    border: 0;
+    background-color: #F2F2F2;
+}
+.card-body{
+    position:relative;
+}
+.card{
+    border-radius: 5%;
+    background-color: #fff;
+    margin: 10px 5px;
+    padding: 10px;
+}
+.card:hover{
+    background-color: #8bf5f5;
+    cursor:pointer
+}
+.card .avatar{
+    width: 20%;
+    display: inline-block;
+    margin-right: 1rem;
+}
+.card .align-self-center{
+    width: 70%;
+    vertical-align: middle;
+    display: inline-block;
+    padding: 0 0 0 0;
+    margin-left: 5px;
+}
+.card .align-self-center h5{
+    margin: 0;
+    padding: 0;
+}
+.card .align-self-center .last_msg{
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.card .avatar .avatar-img{
+    border-radius: 50%;
+    height: 5.125rem;
+    min-height: 5.125rem;
+    width: 5.125rem;
+    min-width: 5.125rem;
+
+}
+.card .msg_time_center{
+    width:100%;
+    vertical-align: middle;
+    padding: 0 0 0 0;
+    margin-bottom: 3px;
+}
+.card .msg_time_center .badge-primary {
+    position: absolute;
+    right: 0;
+    color: #fff;
+    background-color: red;
+}
+.msg_friend_active{
+    background-color: #8bf5f5;
+}
+.text_sign{
+    margin: 10px 10px;
+}
+/*聊天框内容*/
+.content{
+    width: 80%;
+    height: 85%;
+    display: inline-block;
+    border-radius: 10px;
+}
+.content .content_header{
+    border-bottom: rgba(245,246,250,.85) 1px solid;
+    height: 7%;
+    margin: 10px 0;
+    padding: 0 60px;
+}
+.content .content_header img{
+    border-radius: 50%;
+    height: 5.125rem;
+    min-height: 5.125rem;
+    width: 5.125rem;
+    min-width: 5.125rem;
+    margin-right: 10px;
+}
+.content .content_main{
+    height: 73%;
+    padding: 20px 60px;
+    overflow: auto;
+}
+#div_content:focus{
+    outline: none;
+    border: #eee 1px solid;
+}
+/*滚动条样式*/
+.content .content_main::-webkit-scrollbar {
+    width: 0;
+}
+
+.content .content_foot{
+    padding-top: 10px;
+    height: 17%;
+    border-top: rgba(245,246,250,.85) 1px solid;
+}
+.content .you{
+    margin-bottom: 10px;
+}
+.content .you .content_you_headerimg{
+    border-radius: 50%;
+    height: 5.125rem;
+    min-height: 5.125rem;
+    width: 5.125rem;
+    min-width: 5.125rem;
+    margin-right: 10px;
+}
+.content .you div{
+    display: inline-block;
+}
+.content .msg_content{
+    vertical-align: middle;
+    background-color: #f5f6fa;
+    padding: 15px;
+    max-width: 55%;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow: hidden;
+}
+.content .msg_content img{
+    height: 8rem;
+}
+.content .me{
+    margin-bottom: 10px;
+    text-align: right;
+}
+.content .me .msg_content{
+    color:#fff;
+    background-color: #1E9FFF;
+}
+.content .me div{
+    display: inline-block;
+}
+.content .me .content_me_headerimg{
+    border-radius: 50%;
+    height: 5.125rem;
+    min-height: 5.125rem;
+    width: 5.125rem;
+    min-width: 5.125rem;
+    margin-left: 10px;
+}
+textarea:focus {
+    outline: none;
+}
+.emoji{
+    background-color: #eee;
+    z-index: 999;
+    width: 280px;
+    height: 170px;
+    position:absolute;
+    top: -175px;
+    right: 40px;
+    border-radius: 15px;
+    overflow-y: auto;
+}
+.emoji::-webkit-scrollbar {
+    width: 5px;
+}
+.emoji .emoji_font{
+    text-align: center;
+    width: 30px;
+    display: inline-block;
+    font-size: 25px;
+}
+.emoji .emoji_font:hover{
+    cursor:pointer
+}
+/*群成员列表*/
+.group_friend_list{
+    width: 835px;
+    height:60%;
+    overflow-y: auto;
+    margin: 10px auto;
+    text-align: left;
+}
+.group_friend_list::-webkit-scrollbar {
+    width: 5px;
+}
+.group_friend_list::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.2);
+}
+.group_friend_list::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 0;
+    background: rgba(0,0,0,0.1);
+}
+.group_friend_list_span{
+    display:block;
+    width: 60px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+/*搜索*/
+.serch_input{
+    font-size: 1.8rem;
+    width: 65%;
+    line-height: 6rem;
+    border-radius: 20px;
+    background:none;
+    outline:none;
+    border:solid 1px #ccc;
+}
+.serch_btn{
+    color: #fff;
+    border-radius: 6px;
+    padding: 0.6rem;
+    width: 20%;
+    line-height: 100%;
+    font-size: 2rem;
+    border: none;
+    background-color: #5cb85c;
+}
+.serch_btn:active{
+    background-color: #73B876;
+    border: none;
+}

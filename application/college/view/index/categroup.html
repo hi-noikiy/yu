@@ -1,0 +1,112 @@
+{extend name="web_base" /}
+
+{block name="title"}羽化学院{/block}
+
+{block name="style"}
+<style>
+    .main_categroup{width: 65%;margin: 0 auto;font-size: 1rem;padding:10px 0 0 0; }
+    .main_categroup > ul > li{margin: 0 25px 10px 25px;}
+    .main_categroup > ul > li > span{display: inline-block;height: 25px;margin: 10px 10px;padding: 5px;line-height: 25px;}
+    .main_categroup > ul > li > span:hover{cursor: pointer;}
+    .categroup_active{background-color: #faefee;color:#fb4634;}
+    .sub_categroup{background-color: #faefee;}
+    .sub_active{background-color: #fb4634;color:#fff;border-radius: 15px;}
+    body {
+        background-color: #fafafa;
+        display: grid;
+        grid-template-rows: 1fr auto auto;
+    }
+</style>
+{/block}
+{block name="main"}
+<!--类别栏目-->
+<div style="background-color: #fafafa; margin-top: 10px;">
+    <div class="main_categroup" style="background-color: #fff;">
+        <ul>
+            <li>
+                {foreach $categroup as $key => $val}
+                    <span class="categroup {if $Request.param.cate_group == $val['id'] }categroup_active{/if}" onclick="active(this)" data="{$val['id']}">{$val['category']}</span>
+                {/foreach}
+            </li>
+            <li class="sub_categroup" style="display:none;"></li>
+        </ul>
+    </div>
+    <!--课程内容-->
+    <div class="present">
+        <div style="width: 70%;margin: 15px auto;">
+            <div id="select_1" class="present_div select" data='new' data-id="1" onclick="present_select(this)" style="margin: 0 20px 5px 10%;">上新</div>
+            <div id="select_2" class="present_div" data='hot' data-id="1" onclick="present_select(this)" style="margin: 0 20px 5px 20px;">热门</div>
+            <div style="clear: both;border: #e2e2e2 1px solid;margin: 15px auto;width: 85%"></div>
+        </div>
+        <div id="video_model">
+        </div>
+        <div id="video_page">
+        </div>
+        <!--    没有内容显示-->
+        <div id="no_content">
+            <div>
+                <img src="/static/web/image/zanwuneirong.png" alt="">
+            </div>
+            暂无内容
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+    var cate_group = "{$Request.param.cate_group}";
+    if(cate_group != ''){
+        $(".present_div").attr("data-id",cate_group);
+        getsubcategroup(cate_group)
+    } else {
+        $($(".categroup")[0]).addClass("categroup_active")
+        getvideo(1,'new',1)
+    }
+    function present_select(self){
+        var $type = self.getAttribute("data")
+        var id = self.getAttribute("data-id")
+        if($type == 'new'){
+            $("#select_1").addClass("select");
+            $("#select_2").removeClass("select")
+        } else if($type == 'hot') {
+            $("#select_1").removeClass("select");
+            $("#select_2").addClass("select")
+        }
+        getvideo(1,$type,id)
+    }
+    function active(self) {
+        $(self).addClass("categroup_active").siblings(self).removeClass("categroup_active");
+        var id = $(self).attr('data');
+        history.replaceState(null, "",'?cate_group='+id);
+        getsubcategroup(id)
+    }
+    function sub_active(self) {
+        $(self).addClass("sub_active").siblings(self).removeClass("sub_active");
+        var id = $(self).attr('data');
+        $(".present_div").attr("data-id",id)
+        getvideo(1,'new',id)
+    }
+    function getsubcategroup(id) {
+        $.post("/college/getsubcategroup",{'id':id},function (result) {
+            if(result['code'] == 200){
+                var html = '';
+                for (var i=0; i<result['data'].length; i++){
+                    var sub_active = '';
+                    if(i == 0){
+                        sub_active = "class='sub_active'";
+                    }
+                    html += "<span onclick=\"sub_active(this)\" data='"+result['data'][i]['id']+"' "+sub_active+">"+result['data'][i]['category']+"</span>"
+                }
+                $(".sub_categroup").show()
+                $(".sub_categroup").html(html);
+                $(".present_div").attr("data-id",result['data'][0]['id'])
+                getvideo(1,'new',result['data'][0]['id'])
+            } else {
+                $(".sub_categroup").hide()
+                $(".present_div").attr("data-id",id)
+                getvideo(1,'new',id)
+            }
+        });
+    }
+</script>
+{/block}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{block name="title"}{/block}</title>
+    <link rel="stylesheet" type="text/css" href="/static/web/college/css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/web/college/css/home.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/web/college/css/font-awesome.css"/>
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/web/college/js/home_ban.js"></script>
+    {block name="style"}
+    {/block}
+</head>
+<body>
+<div>
+    <div class="egc-top">
+        <div class="nav-cent">
+            <div class="top-r">
+                {php}$web_user = session("web_user");{/php}
+                {if !empty($web_user)}
+                {assign name="username" value="$web_user['username']" /}
+                {assign name="truename" value="$web_user['truename']" /}
+                <div class="operate">{$username}<i class="icon-angle-down icon-large"></i>
+                    <div class="sec-version">
+    <!--                    <div class="items"><a href="#">个人中心</a></div>-->
+                        <div class="items"><a href="/login/loginout">退出登录</a></div>
+                    </div>
+                </div>
+                {else /}
+                <div class="operate"><a href="/login">登录</a></div>
+                {/if}
+            </div>
+            <div class="clear_fix"></div>
+        </div>
+    </div>
+    <!--顶部导航栏-->
+    <div class="navigation">
+        <div class="nav-cent">
+            <ul>
+                <li class="logo"><a href="/college">logo</a></li>
+                <li><a href="/college">首页</a></li>
+    <!--            <li><a href="/college">培训</a></li>-->
+    <!--            <li class="sea">-->
+    <!--                <div class="egc-sea-box">-->
+    <!--                    <input type="text" class="sea-ipt-txt" placeholder="来搜搜看..." />-->
+    <!--                    <a href="#" class="search-btn"><i class="sousuo"></i></a>-->
+    <!--                </div>-->
+    <!--            </li>-->
+            </ul>
+        </div>
+    </div>
+    <div class="navigation-mb" id="egc-head">
+        <div class="logo"><a href="/college"></a></div>
+        <div class="clear_fix"></div>
+    </div>
+    {block name="main"}
+    {/block}
+</div>
+<!--底部-->
+<div class="ftWrap">
+    <div class="copyright">
+        <div class="cent">
+            <div class="copy-txt">
+                <p>版权所有 Copyright © 2021 by 无锡羽化生物科技有限公司</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/web/college/js/index.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var setTime;
+        $(".egc-top .nav-cent .operate").hover(function () {
+            var _this = $(this);
+            setTime = setTimeout(function () {
+                _this.find(".sec-version").slideDown(200);
+                _this.find("i").removeClass("icon-angle-down").addClass("icon-angle-up");
+            }, 200);
+        }, function () {
+            if (setTime) {
+                clearTimeout(setTime);
+            }
+            $(".egc-top .nav-cent .sec-version").slideUp(200);
+            $(".egc-top .nav-cent .operate i").removeClass("icon-angle-up").addClass("icon-angle-down");
+        });
+
+        $(document).ready(function(){
+            $('.flexslider').flexslider({
+                directionNav: true,
+                pauseOnAction: false
+            });
+            $('.flexslider').hover(function(){
+                $('.flex-direction-nav').fadeIn();
+            },function(){
+                $('.flex-direction-nav').fadeOut();
+            })
+        });
+    });
+</script>
+{block name="script"}
+{/block}
+</html>

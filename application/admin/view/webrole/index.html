@@ -1,0 +1,92 @@
+{extend name="base" /}
+
+{block name="title"}前台用户管理{/block}
+
+{block name="style"}
+<style type="text/css">
+
+</style>
+{/block}
+
+
+{block name="main"}
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> <a href="/admin" class="maincolor">首页</a>
+    <span class="c-gray en">&gt;</span>
+    前台角色管理
+    <span class="c-gray en">&gt;</span>
+    角色列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="Hui-article" style="text-align: center">
+    <article class="cl pd-20">
+<!--        <div class="text-c">-->
+<!--            <form action="/admin/webuser" method="get">-->
+<!--                <input type="text" class="input-text" style="width:250px" placeholder="输入用户名称" id="username" name="username" value="{$Request.param.username}">-->
+<!--                <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>-->
+<!--            </form>-->
+<!--        </div>-->
+        <div class="cl pd-5 bg-1 bk-gray mt-10">
+            <span class="l">
+<!--                <a href="javascript:;" onclick="admin_add('添加角色','/admin/webrole/create','1000','500')" class="btn btn-primary radius">-->
+<!--                    <i class="Hui-iconfont">&#xe600;</i> 添加角色-->
+<!--                </a>-->
+            </span>
+            <span class="r">共有数据：<strong>{$list['dataCount']}</strong> 条</span>
+        </div>
+        <div class="mt-10">
+            <table class="table table-border table-bordered table-bg">
+                <thead>
+                <tr>
+                    <th scope="col" colspan="9">角色列表</th>
+                </tr>
+                <tr class="text-c">
+    <!--                <th width="25"><input type="checkbox" name="" value=""></th>-->
+                    <th width="40">ID</th>
+                    <th width="300">角色名</th>
+                    <th width="50">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $list['list'] as $val}
+                <tr class="text-c">
+                    <td>{$val.id}</td>
+                    <td>{$val.rolename}</td>
+                    <td class="td-manage">
+                        <a title="编辑" href="javascript:;" onclick="admin_edit('角色编辑','/admin/webrole/edit'+'?id={$val.id}','{$val.id}','1000','500')" class="ml-5" style="text-decoration:none">
+                            <i class="Hui-iconfont">&#xe6df;</i>
+                        </a>
+                    </td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+            {if empty($list['list'])}
+            <div id="no_content">
+                <div>
+                    <img src="/static/web/image/zanwuneirong.png" alt="">
+                </div>
+                暂无内容
+            </div>
+            {/if}
+        </div>
+    </article>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    /*管理员-删除*/
+    function admin_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            //此处请求后台程序，下方是成功后的前台处理……
+
+            $(obj).parents("tr").remove();
+            layer.msg('已删除!',{icon:1,time:1000});
+        });
+    }
+    /*管理员-编辑*/
+    function admin_edit(title,url,id,w,h){
+        layer_show(title,url,w,h);
+    }
+</script>
+{/block}

@@ -1,0 +1,74 @@
+{extend name="base" /}
+
+{block name="title"}登录日志{/block}
+
+{block name="style"}
+{/block}
+
+
+{block name="main"}
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> <a href="/admin" class="maincolor">首页</a>
+        <span class="c-gray en">&gt;</span>
+        系统管理
+        <span class="c-gray en">&gt;</span>
+        系统日志
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+    </nav>
+    <div class="Hui-article" style="text-align: center">
+        <article class="cl pd-20">
+            <div class="cl pd-5 bg-1 bk-gray mt-20">
+<!--				<span class="l">-->
+<!--				<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>-->
+<!--				</span>-->
+                <span class="r">共有数据：<strong>{$list->total()}</strong> 条</span>
+            </div>
+            <div class="mt-10">
+                <table class="table table-border table-bordered table-bg table-hover table-sort">
+                    <thead>
+                    <tr>
+                        <th scope="col" colspan="9">登录日志</th>
+                    </tr>
+                    <tr class="text-c">
+<!--                        <th width="25"><input type="checkbox" name="" value=""></th>-->
+                        <th width="80">ID</th>
+                        <th width="100">类型</th>
+                        <th>内容</th>
+                        <th width="17%">用户名</th>
+                        <th width="120">客户端IP</th>
+                        <th width="120">时间</th>
+<!--                        <th width="70">操作</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name='list' id='user'}
+                    <tr class="text-c">
+<!--                        <td><input type="checkbox" value="" name=""></td>-->
+                        <td>{$user.id}</td>
+                        <td>登录 - {$user.type == 1 ? '前台' : '后台'}</td>
+                        <td>{$user.loginmsg}</td>
+                        <td>{$user.username}</td>
+                        <td>{$user.ip}</td>
+                        <td>{$user.login_at | date="Y-m-d H:i:s"}</td>
+<!--                        <td><a title="详情" href="javascript:;" onclick="system_log_show(this,'10001')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe665;</i></a>-->
+<!--                            <a title="删除" href="javascript:;" onclick="system_log_del(this,'10001')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>-->
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+                {$list|raw}
+                {if empty($user)}
+                <div id="no_content">
+                    <div>
+                        <img src="/static/web/image/zanwuneirong.png" alt="">
+                    </div>
+                    暂无内容
+                </div>
+                {/if}
+            </div>
+            <div id="pageNav" class="pageNav"></div>
+        </article>
+    </div>
+{/block}
+
+{block name="script"}
+{/block}
